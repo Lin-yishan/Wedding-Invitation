@@ -10,17 +10,10 @@
     <meta property="og:title" content="Bo-Cian & Yi-Hsuan Wedding">
     <meta property="og:description" content="誠摯邀請您見證我們的幸福時刻！2026.12.20 Sun. 午宴 12:30 @ 彰化唯愛庭園">
     <meta property="og:image" content="https://lh3.googleusercontent.com/d/1OFcZaEFxQfLGEw-NLCK4q9UJTPL8BBdU">
-    <meta property="og:url" content="https://wedding.invitation">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bo-Cian & Yi-Hsuan Wedding">
-    <meta name="twitter:description" content="誠摯邀請您見證我們的幸福時刻！2026.12.20 Sun. 午宴 12:30 @ 彰化唯愛庭園">
-    <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1OFcZaEFxQfLGEw-NLCK4q9UJTPL8BBdU">
-    
-    <!-- Google Fonts: Cormorant Garamond & Noto Serif TC -->
+    <!-- Google Fonts: Cormorant Garamond, Great Vibes & Noto Serif TC -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+TC:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Noto+Serif+TC:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -41,7 +34,8 @@
                     },
                     fontFamily: {
                         serif: ['"Noto Serif TC"', 'serif'],
-                        en: ['"Cormorant Garamond"', 'serif']
+                        en: ['"Cormorant Garamond"', 'serif'],
+                        handwriting: ['"Great Vibes"', 'cursive']
                     }
                 }
             }
@@ -70,7 +64,9 @@
             font-family: 'Cormorant Garamond', serif;
         }
 
-        /* 封面頁淡出淡入效果 */
+        .font-handwriting {
+            font-family: 'Great Vibes', cursive;
+        }
         .cover-page {
             position: fixed;
             top: 0;
@@ -81,15 +77,42 @@
             z-index: 50;
             opacity: 1;
             visibility: visible;
-            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.85s ease;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            backface-visibility: hidden;
         }
 
+        /* 高級淡出感 (Cinematic Soft Fade Out) */
         .cover-page.fade-out {
             opacity: 0;
+            transform: scale(1.03);
             visibility: hidden;
             pointer-events: none;
+        }
+
+        /* 計時器數字光芒流過波光效果 (Shimmer Wave) */
+        @keyframes shimmer-wave {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .timer-shimmer {
+            display: inline-block;
+            background: linear-gradient(110deg, #db4809 30%, #ffc0a8 50%, #db4809 70%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer-wave 3.5s infinite linear;
+        }
+
+        /* 地圖邊緣柔和淡入淡出效果 (Soft Mask Edge) */
+        .map-soft-edge {
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%),
+                                linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
+            -webkit-mask-composite: source-in;
+            mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%),
+                        linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
+            mask-composite: intersect;
         }
 
         /* 封面 Open 按鈕柔和顏色呼吸波動動畫 */
@@ -153,22 +176,27 @@
         <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- 右下角浮動音樂控制按鈕 -->
     <button id="musicBtn" onclick="toggleMusic()" aria-label="Toggle Music"
-            class="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-morandi-orange/30 text-morandi-deepOrange flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer">
+            class="fixed bottom-6 right-6 z-[100] w-12 h-12 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-morandi-orange/30 text-morandi-deepOrange flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer">
         <i id="musicIcon" class="fa-solid fa-music text-lg"></i>
+    </button>
+
+    <!-- 回到最上方按鈕 -->
+    <button id="scrollTopBtn" onclick="scrollToTop()" aria-label="Scroll to Top"
+            class="fixed bottom-20 right-6 z-[100] w-12 h-12 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-morandi-orange/30 text-morandi-deepOrange flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer opacity-0 pointer-events-none">
+        <i class="fa-solid fa-arrow-up text-lg"></i>
     </button>
 
     <!-- 1. 封面頁 (Cover Page - 淡出淡入轉跳) -->
     <div id="coverPage" class="cover-page flex flex-col justify-between items-center text-center px-4 py-4 sm:p-6 text-white bg-cover bg-center bg-no-repeat relative overflow-y-auto"
          style="background-image: url('https://lh3.googleusercontent.com/d/1OFcZaEFxQfLGEw-NLCK4q9UJTPL8BBdU');">
 
-        <!-- 頂部漸層：柔和白透向下漸變 -->
-        <div class="absolute top-0 left-0 w-full h-[60vh] bg-gradient-to-b from-white/90 via-white/45 to-transparent pointer-events-none z-0"></div>
+        <!-- 頂部漸層：柔和白透向下漸變 (已淡化透明度) -->
+        <div class="absolute top-0 left-0 w-full h-[55vh] bg-gradient-to-b from-white/65 via-white/20 to-transparent pointer-events-none z-0"></div>
 
-        <!-- 封面頂部：單行 Our Wedding Day 主標語 (橘紅色) -->
-        <div class="pt-2 sm:pt-6 md:pt-10 w-full max-w-4xl px-2 relative z-10 shrink-0">
-            <h1 class="font-en text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-[0.2em] uppercase text-[#E56B48] drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)] whitespace-nowrap overflow-hidden text-ellipsis mx-auto">
+        <!-- 封面頂部：單行 Our Wedding Day 主標語 (橘紅色，位置稍微下移，字體加粗) -->
+        <div class="pt-8 sm:pt-14 md:pt-20 w-full max-w-4xl px-2 relative z-10 shrink-0">
+            <h1 class="font-en text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[0.2em] uppercase text-[#E56B48] drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)] whitespace-nowrap overflow-hidden text-ellipsis mx-auto">
                 Our Wedding Day
             </h1>
             <div class="w-16 h-[2px] bg-[#E56B48] mx-auto mt-2 sm:mt-3 shadow-sm"></div>
@@ -178,43 +206,43 @@
         <div class="flex-grow min-h-[15px]"></div>
 
         <!-- 封面頁下半部資訊 -->
-        <div class="pb-4 sm:pb-8 w-full max-w-lg px-2 sm:px-4 space-y-2.5 sm:space-y-3.5 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] relative z-10 shrink-0 my-auto">
+        <div class="pb-4 sm:pb-8 w-full max-w-lg px-2 sm:px-4 space-y-3.5 sm:space-y-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] relative z-10 shrink-0 my-auto">
             
-            <div class="space-y-1">
+            <div class="space-y-1.5">
                 <div class="flex items-center justify-center space-x-3 sm:space-x-6">
                     <!-- 新郎 -->
                     <div class="text-center">
-                        <div class="text-xl sm:text-3xl font-bold tracking-[0.2em] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">蕭博謙</div>
-                        <div class="font-en text-xs sm:text-base font-light tracking-[0.15em] text-white/95">Bo-Cian</div>
+                        <div class="text-2xl sm:text-4xl font-bold tracking-[0.2em] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">蕭博謙</div>
+                        <div class="font-en text-sm sm:text-lg font-light tracking-[0.15em] text-white/95">Bo-Cian</div>
                     </div>
 
-                    <div class="font-en text-2xl sm:text-3xl font-medium text-white pb-1 sm:pb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">&amp;</div>
+                    <div class="font-en text-3xl sm:text-4xl font-medium text-white pb-1 sm:pb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">&amp;</div>
 
                     <!-- 新娘 -->
                     <div class="text-center">
-                        <div class="text-xl sm:text-3xl font-bold tracking-[0.2em] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">林怡萱</div>
-                        <div class="font-en text-xs sm:text-base font-light tracking-[0.15em] text-white/95">Yi-Hsuan</div>
+                        <div class="text-2xl sm:text-4xl font-bold tracking-[0.2em] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">林怡萱</div>
+                        <div class="font-en text-sm sm:text-lg font-light tracking-[0.15em] text-white/95">Yi-Hsuan</div>
                     </div>
                 </div>
 
-                <p class="text-xs sm:text-base font-light tracking-[0.2em] text-white/95 pt-1">
+                <p class="text-sm sm:text-lg font-light tracking-[0.2em] text-white/95 pt-1.5">
                     誠摯邀請您見證我們的幸福時刻
                 </p>
             </div>
 
             <div class="w-12 h-[1px] bg-white/50 mx-auto my-1"></div>
 
-            <div class="space-y-0.5">
-                <p class="font-en text-2xl sm:text-4xl md:text-5xl font-light tracking-widest text-white drop-shadow-md">
+            <div class="space-y-1">
+                <p class="font-en text-3xl sm:text-5xl md:text-6xl font-light tracking-widest text-white drop-shadow-md">
                     2026.12.20 Sun.
                 </p>
-                <p class="text-xs sm:text-base font-light tracking-widest text-white/95">
+                <p class="text-sm sm:text-lg font-light tracking-widest text-white/95">
                     午宴 12:30 開席
                 </p>
             </div>
 
             <div>
-                <p class="text-xs sm:text-base font-light tracking-wider text-white/95 no-wrap">
+                <p class="text-sm sm:text-lg font-light tracking-wider text-white/95 no-wrap">
                     唯愛庭園 <span class="px-1 text-white/70">|</span> 彰化縣彰化市延和里大埔路2巷126號
                 </p>
             </div>
@@ -230,180 +258,195 @@
     <!-- 2. 內容頁 (Content Page) -->
     <div id="contentPage" class="min-h-screen text-morandi-brown bg-[#FAF6F0]">
 
-        <!-- 頂部固定毛玻璃導航列 -->
-        <nav class="fixed top-0 left-0 w-full z-40 bg-[#FAF6F0]/90 backdrop-blur-md border-b border-[#E56B48]/15 shadow-sm transition-all duration-300">
+        <nav class="fixed top-0 left-0 w-full z-40 bg-white/60 backdrop-blur-md border-b border-white/40 shadow-sm transition-all duration-300">
             <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
-                <button onclick="showCoverPage()" class="font-en text-lg md:text-xl font-bold tracking-widest text-morandi-deepOrange hover:opacity-80 transition-opacity focus:outline-none">
-                    Hsiao &amp; Lin
+                <button onclick="showCoverPage()" class="font-en text-lg md:text-xl font-bold tracking-widest text-morandi-deepOrange hover:opacity-80 transition-opacity focus:outline-none flex items-center group">
+                    <i class="fa-solid fa-chevron-left text-sm md:text-base mr-2 transform group-hover:-translate-x-1 transition-transform duration-200"></i>
+                    <span>Hsiao &amp; Lin</span>
                 </button>
                 
                 <div class="flex items-center space-x-5 sm:space-x-8 text-xs sm:text-sm font-medium text-morandi-brown">
-                    <a href="#details" onclick="scrollToSection('details'); return false;" class="hover:text-morandi-deepOrange transition-colors">婚禮詳情</a>
-                    <a href="#transport" onclick="scrollToSection('transport'); return false;" class="hover:text-morandi-deepOrange transition-colors">交通指引</a>
+                    <a href="#details" onclick="scrollToSection('details'); return false;" class="hover:text-morandi-deepOrange transition-colors flex items-center">
+                        <i class="fa-regular fa-calendar-check mr-1.5 text-morandi-orange"></i>婚禮詳情
+                    </a>
+                    <a href="#transport" onclick="scrollToSection('transport'); return false;" class="hover:text-morandi-deepOrange transition-colors flex items-center">
+                        <i class="fa-solid fa-map-location-dot mr-1.5 text-morandi-orange"></i>交通指引
+                    </a>
                 </div>
             </div>
         </nav>
 
-        <!-- 區塊一：計時器與手繪似顏繪 (頂部純白向下漸變至粉橘) -->
-        <div class="bg-gradient-to-b from-white via-[#F7E5DC] to-[#F4E8E1] pb-10 pt-16 sm:pt-20">
+        <!-- 區塊一：計時器與手繪似顏繪 (頂部純白向下漸變至深莫蘭迪杏橘) -->
+        <div class="bg-gradient-to-b from-white via-[#F7E5DC] to-[#EBD5C8] pb-6 pt-16 sm:pt-20">
             
             <!-- 主視覺 Hero Section -->
-            <section id="hero" class="pb-3 px-2 sm:px-4 text-center max-w-5xl mx-auto relative flex flex-col items-center justify-center">
+            <section id="hero" class="pb-2 px-2 sm:px-4 text-center max-w-5xl mx-auto relative flex flex-col items-center justify-center">
                 
-                <!-- 1. 倒數計時器 (上方留空，緊湊銜接下方手繪圖) -->
-                <div class="w-full max-w-lg mx-auto pt-10 sm:pt-14 pb-0 px-3">
-                    <div class="text-center mb-2">
+                <!-- 1. 倒數計時器 (移除外層 Card 框) -->
+                <div class="w-full max-w-lg mx-auto p-2 mb-2">
+                    <div class="text-center mb-1.5">
                         <p class="text-xs sm:text-sm font-medium tracking-widest text-morandi-deepOrange">
-                            好久不見，婚禮倒數中，期待那天見到你們
+                            紅包準備好了嗎? 婚禮倒數中!!
                         </p>
                         <div class="w-10 h-[1px] bg-morandi-orange/30 mx-auto mt-1.5"></div>
                     </div>
 
                     <!-- 4 個數字橫排 -->
-                    <div class="flex items-center justify-between text-center max-w-sm mx-auto py-1">
+                    <div class="flex items-center justify-between text-center max-w-sm sm:max-w-md mx-auto py-1">
                         
                         <!-- DAYS -->
                         <div class="flex-1 flex flex-col items-center justify-center py-0.5">
-                            <span id="timer-days" class="font-en text-2xl sm:text-4xl font-bold text-[#E56B48] tracking-tight leading-none">00</span>
-                            <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1">DAYS</span>
+                            <span id="timer-days" class="font-en text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-none timer-shimmer">00</span>
+                            <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1.5">DAYS</span>
                         </div>
 
                         <!-- 分隔線 | -->
-                        <div class="text-morandi-orange/30 font-light text-base sm:text-xl px-1">|</div>
+                        <div class="text-morandi-orange/30 font-light text-xl sm:text-2xl px-1">|</div>
 
                         <!-- HOURS -->
                         <div class="flex-1 flex flex-col items-center justify-center py-0.5">
-                            <span id="timer-hours" class="font-en text-2xl sm:text-4xl font-bold text-[#E56B48] tracking-tight leading-none">00</span>
-                            <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1">HRS</span>
+                            <span id="timer-hours" class="font-en text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-none timer-shimmer">00</span>
+                            <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1.5">HRS</span>
                         </div>
 
                         <!-- 分隔線 | -->
-                        <div class="text-morandi-orange/30 font-light text-base sm:text-xl px-1">|</div>
+                        <div class="text-morandi-orange/30 font-light text-xl sm:text-2xl px-1">|</div>
 
                         <!-- MINS -->
                         <div class="flex-1 flex flex-col items-center justify-center py-0.5">
-                            <span id="timer-minutes" class="font-en text-2xl sm:text-4xl font-bold text-[#E56B48] tracking-tight leading-none">00</span>
-                            <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1">MINS</span>
+                            <span id="timer-minutes" class="font-en text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-none timer-shimmer">00</span>
+                            <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1.5">MINS</span>
                         </div>
 
                         <!-- 分隔線 | -->
-                        <div class="text-morandi-orange/30 font-light text-base sm:text-xl px-1">|</div>
+                        <div class="text-morandi-orange/30 font-light text-xl sm:text-2xl px-1">|</div>
 
                         <!-- SECS -->
                         <div class="flex-1 flex flex-col items-center justify-center py-0.5">
-                            <span id="timer-seconds" class="font-en text-2xl sm:text-4xl font-bold text-[#E56B48] tracking-tight leading-none">00</span>
-                            <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1">SECS</span>
+                            <span id="timer-seconds" class="font-en text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-none timer-shimmer">00</span>
+                            <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1.5">SECS</span>
                         </div>
 
                     </div>
                 </div>
 
-                <!-- 2. 手繪圖 (往上靠近計時器，背景字下移 15% 且放大) -->
-                <div id="handDrawnArtwork" class="relative inline-block w-full z-10 flex flex-col items-center justify-center -mt-1 sm:-mt-2">
+                <!-- 2. 手繪圖 -->
+                <div id="handDrawnArtwork" class="relative inline-block w-full z-10 flex flex-col items-center justify-center my-2">
                     
-                    <!-- 2026.12.20 Sun. 淡橘色背景水印文字 (位置下移 15% 至 top-[80%]，字體放大) -->
-                    <div class="absolute top-[77%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 font-en text-4xl sm:text-6xl md:text-8xl font-light tracking-[0.15em] text-morandi-orange/25 pointer-events-none select-none whitespace-nowrap">
+                    <!-- 2026.12.20 Sun. 淡橘色背景水印文字 -->
+                    <div class="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 font-en text-4xl sm:text-6xl md:text-8xl font-light tracking-[0.15em] text-morandi-orange/20 pointer-events-none select-none whitespace-nowrap">
                         2026.12.20 Sun.
                     </div>
 
-                    <div class="w-[300px] h-[300px] sm:w-[480px] sm:h-[480px] md:w-[620px] md:h-[620px] max-w-[92vw] relative z-10 flex items-center justify-center my-0">
+                    <div class="w-[280px] h-[280px] sm:w-[420px] sm:h-[420px] md:w-[540px] md:h-[540px] max-w-[90vw] relative z-10 flex items-center justify-center my-0">
                         <img src="https://lh3.googleusercontent.com/d/1psA814cDK-TNrfQ-IRNhvX5jXpMFDtDg" 
                              alt="博謙與怡萱手繪似顏繪" 
-                             class="max-w-full max-h-full object-contain filter drop-shadow-lg transform hover:scale-105 transition-transform duration-500"
+                             class="max-w-full max-h-full object-contain filter drop-shadow-md transform hover:scale-105 transition-transform duration-500"
                              onerror="this.onerror=null; this.src='https://placehold.co/1000x1000/FAF6F0/B36547?text=Bo-Cian+%26+Yi-Hsuan';">
                     </div>
 
-                    <!-- 手繪圖下方：新人中文名字小字 (咖啡色) -->
-                    <div class="mt-1 relative z-10">
-                        <p class="text-base sm:text-xl md:text-2xl font-bold tracking-[0.25em] text-morandi-coffee">
+                    <!-- 手繪圖下方：新人中文名字小字 -->
+                    <div class="mt-2 relative z-10">
+                        <p class="text-xl sm:text-2xl md:text-3xl font-bold tracking-[0.25em] text-morandi-coffee">
                             蕭博謙 <span class="text-morandi-orange mx-1.5">‧</span> 林怡萱
                         </p>
                     </div>
                 </div>
 
-                <div class="space-y-0.5 mt-4 relative z-10">
-                    <h2 class="font-en text-2xl sm:text-3xl md:text-4xl font-bold tracking-widest text-[#E56B48]">
-                        Our Story
+                <div class="space-y-3 mt-4 relative z-10 flex flex-col items-center">
+                    <h2 class="font-en text-2xl sm:text-3xl md:text-4xl font-bold tracking-widest text-[#db4809]">
+                        Our Wedding
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-morandi-muted tracking-[0.2em] font-light">誠摯邀請您共享我們的幸福時刻</p>
+                    
+                    <div class="pt-1 text-xs sm:text-sm text-morandi-brown/90 font-light tracking-wider flex flex-col items-center">
+                        <p class="text-base sm:text-lg font-normal text-morandi-coffee tracking-widest">好久不見</p>
+                        
+                        <!-- 中間垂直線 -->
+                        <div class="w-[1px] h-6 bg-morandi-orange/40 my-2"></div>
+                        
+                        <p class="text-sm sm:text-base md:text-lg leading-relaxed px-2 text-center">
+                            <span class="no-wrap">收到這封喜帖表示我們的婚禮進入倒數了，</span><br>
+                            <span class="no-wrap">誠摯地邀請你/妳一起來共享我們的幸福時刻</span>
+                        </p>
+                    </div>
                 </div>
             </section>
         </div>
 
         <!-- 區塊二：新人資訊、家長名單、想說的話與婚紗照 -->
-        <div class="bg-gradient-to-b from-[#F4E8E1] via-[#FAF6F0] to-[#FAF6F0] py-12 px-4">
+        <div class="bg-gradient-to-b from-[#EBD5C8] via-[#F4E8E1] to-[#FAF6F0] pt-2 pb-12 px-4">
             <section class="max-w-3xl mx-auto space-y-10">
                 
-                <!-- 新人資訊：並排 (grid-cols-2) -->
-                <div class="grid grid-cols-2 gap-3 sm:gap-6 text-center">
+                <!-- 新人合照與資訊區塊 -->
+                <div class="flex flex-col items-center space-y-6">
                     
-                    <!-- 新郎資料 -->
-                    <div class="space-y-3">
-                        <div class="w-20 h-20 sm:w-28 sm:h-28 mx-auto rounded-full overflow-hidden shadow-md border-2 border-white">
-                            <img src="https://lh3.googleusercontent.com/d/1FF0oD_rLNF9Ybf1jw9gzK0rgk5A4RV1_" 
-                                 alt="新郎 蕭博謙" 
-                                 class="w-full h-full object-cover"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/300x300/F4E8E1/B36547?text=Groom+Bo-Cian';">
-                        </div>
-                        <div>
-                            <h4 class="text-base sm:text-lg font-bold tracking-wider">蕭博謙</h4>
-                            <p class="font-en text-xs sm:text-sm text-morandi-muted tracking-widest">Bo-Cian</p>
-                            <p class="text-[11px] sm:text-xs text-morandi-orange tracking-widest uppercase mt-0.5 font-medium">Groom / 新郎</p>
-                        </div>
-                        <!-- 家長名單 -->
-                        <div class="pt-2 text-xs sm:text-sm text-morandi-brown/90 leading-relaxed">
-                            <p class="font-semibold text-morandi-deepOrange mb-1">【新郎家長】</p>
-                            <p>蕭富雄</p>
-                            <p>蕭伊男 ‧ 吳玉婷</p>
-                        </div>
+                    <!-- 新人合照（手機版 -mx-4 貼齊螢幕左右兩側，無圓角） -->
+                    <div class="relative w-[calc(100%+2rem)] -mx-4 sm:mx-auto sm:w-full sm:max-w-xl">
+                        <img src="https://lh3.googleusercontent.com/d/1V6rPP9odV3XehxCdO2X_FSmPsfkk2q0Y" 
+                             alt="蕭博謙與林怡萱合照" 
+                             class="w-full h-auto object-cover rounded-none shadow-sm relative z-10"
+                             onerror="this.onerror=null; this.src='https://placehold.co/800x600/F4E8E1/B36547?text=Bo-Cian+%26+Yi-Hsuan';">
                     </div>
 
-                    <!-- 新娘資料 -->
-                    <div class="space-y-3">
-                        <div class="w-20 h-20 sm:w-28 sm:h-28 mx-auto rounded-full overflow-hidden shadow-md border-2 border-white">
-                            <img src="https://lh3.googleusercontent.com/d/185xuzvUb-233eNEm6IXC_Oc6orinoNd9" 
-                                 alt="新娘 林怡萱" 
-                                 class="w-full h-full object-cover"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/300x300/F4E8E1/B36547?text=Bride+Yi-Hsuan';">
+                    <!-- 新人與家長資訊（左側新郎，右側新娘） -->
+                    <div class="w-full flex justify-around items-start">
+                        <!-- 新郎資料（左側） -->
+                        <div class="space-y-2 w-[46%] flex flex-col items-center text-center">
+                            <div>
+                                <h4 class="text-base sm:text-lg font-bold tracking-wider">蕭博謙</h4>
+                                <p class="font-en text-xs sm:text-sm text-morandi-muted tracking-widest">Bo-Cian</p>
+                                <p class="text-[11px] sm:text-xs text-morandi-orange tracking-widest uppercase mt-0.5 font-medium">Groom / 新郎</p>
+                            </div>
+                            <!-- 家長名單 -->
+                            <div class="pt-1 text-xs sm:text-sm text-morandi-brown/90 leading-relaxed">
+                                <p class="font-semibold text-morandi-deepOrange mb-1">【新郎家長】</p>
+                                <p class="text-sm sm:text-base font-bold tracking-wider">蕭富雄</p>
+                                <p class="text-sm sm:text-base font-bold tracking-wider">蕭伊男 ‧ 吳玉婷</p>
+                            </div>
                         </div>
-                        <div>
-                            <h4 class="text-base sm:text-lg font-bold tracking-wider">林怡萱</h4>
-                            <p class="font-en text-xs sm:text-sm text-morandi-muted tracking-widest">Yi-Hsuan</p>
-                            <p class="text-[11px] sm:text-xs text-morandi-orange tracking-widest uppercase mt-0.5 font-medium">Bride / 新娘</p>
-                        </div>
-                        <!-- 家長名單 -->
-                        <div class="pt-2 text-xs sm:text-sm text-morandi-brown/90 leading-relaxed">
-                            <p class="font-semibold text-morandi-deepOrange mb-1">【新娘家長】</p>
-                            <p>林玉堂 ‧ 許錦雀</p>
-                        </div>
-                    </div>
 
-                </div>
-
-                <!-- 想說的話 -->
-                <div class="text-center max-w-xl mx-auto py-2">
-                    <div class="text-sm md:text-base leading-loose text-morandi-brown/90 font-light space-y-2">
-                        <p>收到這封喜帖，</p>
-                        <p>表示我們婚禮的日子開始倒數了！</p>
-                        <p>成長的路上，謝謝有你一路相伴，</p>
-                        <p>見證了我們從一個人變成「我們」。</p>
-                        <p class="pt-3 font-medium text-morandi-deepOrange">誠摯邀請你撥冗光臨，一起來分享我們的喜悅與幸福。</p>
+                        <!-- 新娘資料（右側） -->
+                        <div class="space-y-2 w-[46%] flex flex-col items-center text-center">
+                            <div>
+                                <h4 class="text-base sm:text-lg font-bold tracking-wider">林怡萱</h4>
+                                <p class="font-en text-xs sm:text-sm text-morandi-muted tracking-widest">Yi-Hsuan</p>
+                                <p class="text-[11px] sm:text-xs text-morandi-orange tracking-widest uppercase mt-0.5 font-medium">Bride / 新娘</p>
+                            </div>
+                            <!-- 家長名單 -->
+                            <div class="pt-1 text-xs sm:text-sm text-morandi-brown/90 leading-relaxed">
+                                <p class="font-semibold text-morandi-deepOrange mb-1">【新娘家長】</p>
+                                <p class="text-sm sm:text-base font-bold tracking-wider">林玉堂 ‧ 許錦雀</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 婚紗照 (無白框) -->
-                <div class="pt-2">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="overflow-hidden rounded-2xl shadow-sm">
-                            <img src="https://lh3.googleusercontent.com/d/1FF0oD_rLNF9Ybf1jw9gzK0rgk5A4RV1_" 
+                <!-- 婚紗照區域：尺寸微調縮小 -->
+                <div class="pt-4 space-y-8 -mx-4 sm:mx-0">
+                    <!-- 第一張婚紗照（手機版貼齊螢幕右邊，尺寸小巧） -->
+                    <div class="flex justify-end">
+                        <div class="w-[65%] sm:w-[45%] md:w-[38%] max-w-[260px]">
+                            <img src="https://lh3.googleusercontent.com/d/1kYoVe2ql43v5m-6NYjVLXdzl8grC-8oK" 
                                  alt="婚紗照 1" 
-                                 class="w-full h-72 md:h-80 object-cover transform hover:scale-105 transition-transform duration-500"
+                                 class="w-full h-auto object-contain shadow-sm transform hover:scale-[1.02] transition-transform duration-500"
                                  onerror="this.onerror=null; this.src='https://placehold.co/600x800/F4E8E1/B36547?text=Wedding+Photo+1';">
                         </div>
-                        <div class="overflow-hidden rounded-2xl shadow-sm">
+                    </div>
+
+                    <!-- 兩張婚紗照之間的溫暖話語 -->
+                    <div class="py-4 px-6 text-center my-2">
+                        <p class="text-sm sm:text-base md:text-lg text-morandi-brown tracking-wider leading-relaxed">
+                            「茫茫人海中，遇見彼此是萬分之一的幸運；<br>
+                            未來的每一天，願與你攜手同行，共享歲月靜好。」
+                        </p>
+                    </div>
+
+                    <!-- 第二張婚紗照（手機版貼齊螢幕左邊，尺寸小巧） -->
+                    <div class="flex justify-start">
+                        <div class="w-[65%] sm:w-[45%] md:w-[38%] max-w-[260px]">
                             <img src="https://lh3.googleusercontent.com/d/185xuzvUb-233eNEm6IXC_Oc6orinoNd9" 
                                  alt="婚紗照 2" 
-                                 class="w-full h-72 md:h-80 object-cover transform hover:scale-105 transition-transform duration-500"
+                                 class="w-full h-auto object-contain shadow-sm transform hover:scale-[1.02] transition-transform duration-500"
                                  onerror="this.onerror=null; this.src='https://placehold.co/600x800/F4E8E1/B36547?text=Wedding+Photo+2';">
                         </div>
                     </div>
@@ -424,60 +467,121 @@
                 <div class="space-y-6 max-w-2xl mx-auto">
                     
                     <!-- 1. 婚宴時間 Card -->
-                    <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-morandi-lightOrange/60 space-y-4">
+                    <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-morandi-lightOrange/60 space-y-5">
                         <div class="flex justify-between items-center border-b pb-2 border-morandi-orange/30">
                             <span class="font-bold text-morandi-brown text-base flex items-center">
-                                <i class="fa-regular fa-calendar-days text-morandi-orange mr-2"></i>【 婚宴時間 】
+                                <i class="fa-regular fa-calendar-days text-morandi-orange mr-2"></i>婚宴時間
                             </span>
-                            <span class="text-xs text-morandi-muted font-en tracking-wider">DECEMBER 2026</span>
                         </div>
 
-                        <div class="grid grid-cols-7 text-center text-xs md:text-sm font-light gap-y-3 py-2">
-                            <span class="text-morandi-orange font-semibold">日</span>
-                            <span class="text-gray-400">一</span>
-                            <span class="text-gray-400">二</span>
-                            <span class="text-gray-400">三</span>
-                            <span class="text-gray-400">四</span>
-                            <span class="text-gray-400">五</span>
-                            <span class="text-morandi-orange font-semibold">六</span>
+                        <!-- 容器：手機版上下排列 (flex-col)，電腦版左右分欄 (md:flex-row) -->
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-around gap-6 pt-1">
+                            <!-- 上半部與左半部：日期與開席時間 (居中對齊) -->
+                            <div class="flex items-center justify-center gap-4 sm:gap-6 py-2">
+                                <!-- 26 12 20 數字 (無中間間距) -->
+                                <div class="flex flex-col justify-center items-center font-en font-bold text-[#db4809] text-3xl sm:text-4xl md:text-5xl leading-[0.9] py-0 space-y-0">
+                                    <span>26</span>
+                                    <span>12</span>
+                                    <span>20</span>
+                                </div>
 
-                            <span class="text-gray-300"></span><span class="text-gray-300"></span>
-                            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
-                            <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
-                            <span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span>
-                            
-                            <div class="relative flex items-center justify-center">
-                                <span class="w-8 h-8 rounded-full bg-morandi-orange text-white font-bold flex items-center justify-center shadow-md highlight-circle z-10">
-                                    20
-                                </span>
+                                <!-- 中間垂直分隔線 -->
+                                <div class="w-[1px] bg-morandi-orange/30 self-stretch my-0.5"></div>
+
+                                <!-- 右側時間資訊 -->
+                                <div class="text-left flex flex-col justify-between py-0.5 text-sm sm:text-base md:text-lg font-medium text-morandi-brown tracking-wider space-y-1.5">
+                                    <p>2026 / 12 / 20</p>
+                                    <p>Sunday 星期日</p>
+                                    <p>午宴 12:30 開席</p>
+                                </div>
                             </div>
 
-                            <span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span>
-                            <span>27</span><span>28</span><span>29</span><span>30</span><span>31</span>
-                        </div>
+                            <!-- 下半部 (手機) / 右半部 (電腦)：DECEMBER 2026 日曆 -->
+                            <div class="flex flex-col items-center justify-center">
+                                <!-- 日曆底色容器（尺寸再縮小 p-2 sm:p-2.5，整體更精緻精巧） -->
+                                <div class="w-full sm:w-auto bg-[#F8EFEA]/80 border border-morandi-orange/20 rounded-2xl p-2.5 sm:p-3 flex flex-col items-center shadow-inner">
+                                    <span class="text-[11px] sm:text-xs text-morandi-muted font-en tracking-[0.2em] font-bold mb-1 uppercase">DECEMBER 2026</span>
+                                    
+                                    <!-- 日曆表格（字體加大 text-xs sm:text-sm md:text-base） -->
+                                    <div class="w-full sm:w-auto flex-shrink-0">
+                                        <div class="grid grid-cols-7 text-center text-xs sm:text-sm font-semibold gap-y-0.5 w-48 sm:w-52 mx-auto items-center">
+                                            <span class="text-morandi-orange font-bold h-6 sm:h-7 flex items-center justify-center text-xs sm:text-sm">日</span>
+                                            <span class="text-gray-400 font-bold h-6 sm:h-7 flex items-center justify-center text-xs sm:text-sm">一</span>
+                                            <span class="text-gray-400 font-bold h-6 sm:h-7 flex items-center justify-center text-xs sm:text-sm">二</span>
+                                            <span class="text-gray-400 font-bold h-6 sm:h-7 flex items-center justify-center text-xs sm:text-sm">三</span>
+                                            <span class="text-gray-400 font-bold h-6 sm:h-7 flex items-center justify-center text-xs sm:text-sm">四</span>
+                                            <span class="text-gray-400 font-bold h-6 sm:h-7 flex items-center justify-center text-xs sm:text-sm">五</span>
+                                            <span class="text-morandi-orange font-bold h-6 sm:h-7 flex items-center justify-center text-xs sm:text-sm">六</span>
 
-                        <p class="text-center text-xs md:text-sm text-morandi-deepOrange pt-2 font-medium">
-                            <i class="fa-solid fa-heart mr-1.5 text-xs"></i> 2026 / 12 / 20 (星期日) 午宴 12:30 開席 (12:00 入席)
-                        </p>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center"></span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center"></span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">1</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">2</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">3</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">4</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">5</span>
+                                            
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">6</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">7</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">8</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">9</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">10</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">11</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">12</span>
+                                            
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">13</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">14</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">15</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">16</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">17</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">18</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">19</span>
+                                            
+                                            <!-- 20 日愛心標記 (#db4809) -->
+                                            <div class="relative flex items-center justify-center h-6 sm:h-7">
+                                                <i class="fa-solid fa-heart text-[#db4809] text-base sm:text-lg highlight-circle"></i>
+                                                <span class="absolute text-white font-bold text-[9px] sm:text-[10px] z-10 pt-[0.5px]">20</span>
+                                            </div>
+
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">21</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">22</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">23</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">24</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">25</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">26</span>
+                                            
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">27</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">28</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">29</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">30</span>
+                                            <span class="h-6 sm:h-7 flex items-center justify-center">31</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
 
                     <!-- 2. 婚宴場地 Card -->
                     <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-morandi-lightOrange/60 space-y-4">
-                        <div class="space-y-2">
-                            <h5 class="text-base md:text-lg font-bold text-morandi-brown flex items-center">
-                                <i class="fa-solid fa-building-columns text-morandi-orange mr-2.5"></i>【 婚宴場地 】
-                            </h5>
-                            <p class="text-base font-semibold text-morandi-deepOrange pl-6 no-wrap">唯愛庭園 - 艾薇拉廳</p>
-                            <p class="text-xs md:text-sm text-morandi-muted pl-6 flex items-start">
+                        <div class="flex justify-between items-center border-b pb-2 border-morandi-orange/30">
+                            <span class="font-bold text-morandi-brown text-base flex items-center">
+                                <i class="fa-solid fa-building-columns text-morandi-orange mr-2"></i>婚宴場地
+                            </span>
+                        </div>
+                        <div class="space-y-1.5 pt-1">
+                            <p class="text-base font-semibold text-morandi-deepOrange no-wrap">唯愛庭園 - 艾薇拉廳</p>
+                            <p class="text-xs md:text-sm text-morandi-muted flex items-start">
                                 <i class="fa-solid fa-location-dot text-morandi-orange/80 mr-2 mt-0.5"></i>
                                 <span class="no-wrap">彰化縣彰化市延和里大埔路2巷126號</span>
                             </p>
                         </div>
 
-                        <!-- 宴客場地地圖 -->
+                        <!-- 宴客場地地圖 (無硬邊框，邊緣柔和淡入) -->
                         <div class="pt-2">
                             <p class="text-xs text-morandi-muted mb-2 font-medium">【宴客場地位置引導圖】</p>
-                            <div class="rounded-2xl overflow-hidden shadow-sm">
+                            <div class="map-soft-edge overflow-hidden">
                                 <img src="https://lh3.googleusercontent.com/d/1qQtOLqgfyYCrUjcE-PG1FG-Ig-_y8lWB" 
                                      alt="唯愛庭園 - 艾薇拉廳位置圖" 
                                      class="w-full h-auto object-cover max-h-80"
@@ -576,7 +680,7 @@
         <!-- 頁尾 Footer -->
         <footer class="py-10 bg-gradient-to-b from-[#FAF6F0] via-[#F4E8E1] to-[#E5D2C5] text-center">
             <p class="font-en text-sm tracking-widest text-morandi-muted">
-                Hsiao Bo-Cian &amp; Lin Yi-Hsuan Wedding Invitation
+                Bo-Cian &amp; Yi-Hsuan Wedding Invitation
             </p>
             <p class="text-xs text-morandi-muted/80 mt-1 font-light">
                 2026.12.20 Sun. ‧ 彰化唯愛庭園
@@ -593,7 +697,26 @@
             }
         }
 
-        // 1. 封面淡出轉跳效果
+        // 移至最上方
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 監聽滾動以顯示/隱藏「回到最上方」按鈕
+        window.addEventListener('scroll', () => {
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            if (scrollTopBtn) {
+                if (window.scrollY > 300) {
+                    scrollTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+                    scrollTopBtn.classList.add('opacity-100', 'pointer-events-auto');
+                } else {
+                    scrollTopBtn.classList.add('opacity-0', 'pointer-events-none');
+                    scrollTopBtn.classList.remove('opacity-100', 'pointer-events-auto');
+                }
+            }
+        });
+
+        // 1. 封面高級淡出動態效果 (Soft Fade Out)
         function flipPage() {
             const cover = document.getElementById('coverPage');
             const body = document.body;
@@ -607,7 +730,7 @@
 
                 setTimeout(() => {
                     cover.style.display = 'none';
-                }, 500);
+                }, 850);
             }
         }
 
@@ -654,7 +777,7 @@
                 cover.style.display = 'flex';
                 void cover.offsetWidth;
                 window.scrollTo({ top: 0, behavior: 'instant' });
-                cover.classList.remove('fade-out');
+                cover.classList.remove('slide-up', 'fade-out');
                 body.classList.add('cover-active');
             }
         }
