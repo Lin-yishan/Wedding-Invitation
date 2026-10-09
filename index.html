@@ -57,8 +57,28 @@
         /* 封面頁啟用時鎖定背景滾動 */
         body.cover-active {
             overflow: hidden !important;
-            height: 100vh;
+            height: 100%;
             touch-action: none;
+        }
+        html:has(body.cover-active) {
+            overflow: hidden !important;
+            height: 100%;
+        }
+
+        /* 封面頁期間：內容頁收合成一個畫面高並隱藏，絕不會從封面下方露出 */
+        body.cover-active #contentPage {
+            height: 100dvh;
+            max-height: 100dvh;
+            overflow: hidden;
+            visibility: hidden;
+            transition: visibility 0s linear 0.6s;
+        }
+
+        /* 矮螢幕（小手機、橫向）縮小封面間距，讓內容盡量一屏放得下 */
+        @media (max-height: 700px) {
+            #coverPage { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+            #coverPage > div:nth-of-type(2) { padding-top: 1rem !important; }
+            #coverPage > div:last-of-type { padding-bottom: 0.25rem !important; }
         }
 
         /* 封面頁時隱藏導覽列 */
@@ -82,11 +102,15 @@
         .cover-page {
             position: fixed;
             top: 0;
+            right: 0;
+            bottom: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
+            width: 100%;
+            height: 100%;
             z-index: 50;
+            background-size: cover;
+            background-position: center;
+            overscroll-behavior: contain;
             opacity: 1;
             visibility: visible;
             transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -693,20 +717,34 @@
         });
 
         // 封面淡出過渡效果
+        // 瞬間捲到頁面最上方（暫時關閉 scroll-smooth，避免手機瀏覽器變成慢慢滑動）
+        function jumpToTopInstant() {
+            const root = document.documentElement;
+            const prev = root.style.scrollBehavior;
+            root.style.scrollBehavior = 'auto';
+            window.scrollTo(0, 0);
+            root.scrollTop = 0;
+            document.body.scrollTop = 0;
+            root.style.scrollBehavior = prev;
+        }
+
+        let coverHideTimer = null;
+
         function flipPage() {
             const cover = document.getElementById('coverPage');
             const body = document.body;
             const musicBtn = document.getElementById('musicBtn');
             if (cover) {
-                window.scrollTo({ top: 0, behavior: 'instant' });
+                clearTimeout(coverHideTimer);
+                jumpToTopInstant();
                 cover.classList.add('fade-out');
                 body.classList.remove('cover-active');
-                
+
                 // 進入內容頁顯示音樂按鈕並播放音樂
                 if (musicBtn) musicBtn.classList.remove('hidden');
                 playMusic();
 
-                setTimeout(() => {
+                coverHideTimer = setTimeout(() => {
                     cover.style.display = 'none';
                 }, 600);
             }
@@ -762,17 +800,23 @@
             if (musicBtn) musicBtn.classList.add('hidden');
 
             if (cover) {
-                // 1. 重新顯示封面層並將封面內部滾動條歸零
+                // 取消尚未執行的「隱藏封面」計時器，避免和返回動作互相打架
+                clearTimeout(coverHideTimer);
+
+                // 1. 先瞬間回到頁面最上方，再鎖定背景滾動（順序很重要，鎖定後就無法再捲動）
+                jumpToTopInstant();
+                body.classList.add('cover-active');
+
+                // 2. 重新顯示封面層並將封面內部滾動條歸零
                 cover.style.display = 'flex';
                 cover.scrollTop = 0;
-
-                // 2. 視窗置頂與鎖定背景滾動
-                window.scrollTo({ top: 0, behavior: 'instant' });
-                body.classList.add('cover-active');
 
                 // 3. 強制重繪後移除 fade-out 類別，確保立刻顯示並進行淡入動畫
                 void cover.offsetWidth;
                 cover.classList.remove('fade-out');
+
+                // 4. 下一個 frame 再確認一次位置，避免手機瀏覽器殘留捲動位置
+                requestAnimationFrame(jumpToTopInstant);
             }
         }
 
