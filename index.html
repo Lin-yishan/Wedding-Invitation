@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bo-Cian & Yi-Hsuan Wedding</title>
 
-    <!-- 社群分享預覽 Meta 標籤 (Open Graph & Twitter Card) -->
+    <!-- 社群分享預覽 Meta 標籤 -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Bo-Cian & Yi-Hsuan Wedding">
     <meta property="og:description" content="誠摯邀請您見證我們的幸福時刻！2026.12.20 Sun. 午宴 12:30 @ 彰化唯愛庭園">
     <meta property="og:image" content="https://lh3.googleusercontent.com/d/1OFcZaEFxQfLGEw-NLCK4q9UJTPL8BBdU">
+    
     <!-- Google Fonts: Cormorant Garamond, Great Vibes & Noto Serif TC -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -67,6 +68,7 @@
         .font-handwriting {
             font-family: 'Great Vibes', cursive;
         }
+
         .cover-page {
             position: fixed;
             top: 0;
@@ -77,21 +79,22 @@
             z-index: 50;
             opacity: 1;
             visibility: visible;
-            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.85s ease;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             backface-visibility: hidden;
         }
 
-        /* 高級淡出感 (Cinematic Soft Fade Out) */
+        /* 高級淡出轉場感 (Soft Fade Out) */
         .cover-page.fade-out {
             opacity: 0;
             transform: scale(1.03);
             visibility: hidden;
             pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.6s;
         }
 
-        /* 計時器數字光芒流過波光效果 (Shimmer Wave) */
+        /* 計時器數字微光流過動態 (Shimmer Wave) */
         @keyframes shimmer-wave {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
@@ -160,6 +163,7 @@
             opacity: 1;
         }
 
+        /* 黑膠唱片旋轉動畫 */
         @keyframes disc-spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -171,13 +175,14 @@
 </head>
 <body class="relative min-h-screen cover-active bg-[#FAF6F0]">
 
-    <!-- 背景音樂 Audio 標籤 (可替換 src 連結為您喜愛的浪漫音樂 MP3) -->
+    <!-- 背景音樂 Audio 標籤 -->
     <audio id="bgMusic" loop preload="auto">
         <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- 音樂播放按鈕 (預設隱藏，跳轉至內容頁才顯示) -->
     <button id="musicBtn" onclick="toggleMusic()" aria-label="Toggle Music"
-            class="fixed bottom-6 right-6 z-[100] w-12 h-12 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-morandi-orange/30 text-morandi-deepOrange flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer">
+            class="hidden fixed bottom-6 right-6 z-[100] w-12 h-12 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-morandi-orange/30 text-morandi-deepOrange flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer">
         <i id="musicIcon" class="fa-solid fa-music text-lg"></i>
     </button>
 
@@ -187,14 +192,14 @@
         <i class="fa-solid fa-arrow-up text-lg"></i>
     </button>
 
-    <!-- 1. 封面頁 (Cover Page - 淡出淡入轉跳) -->
+    <!-- 1. 封面頁 (Cover Page) -->
     <div id="coverPage" class="cover-page flex flex-col justify-between items-center text-center px-4 py-4 sm:p-6 text-white bg-cover bg-center bg-no-repeat relative overflow-y-auto"
          style="background-image: url('https://lh3.googleusercontent.com/d/1OFcZaEFxQfLGEw-NLCK4q9UJTPL8BBdU');">
 
-        <!-- 頂部漸層：柔和白透向下漸變 (已淡化透明度) -->
+        <!-- 頂部漸層：柔和白透向下漸變 -->
         <div class="absolute top-0 left-0 w-full h-[55vh] bg-gradient-to-b from-white/65 via-white/20 to-transparent pointer-events-none z-0"></div>
 
-        <!-- 封面頂部：單行 Our Wedding Day 主標語 (橘紅色，位置稍微下移，字體加粗) -->
+        <!-- 封面頂部：單行 Our Wedding Day 主標語 -->
         <div class="pt-8 sm:pt-14 md:pt-20 w-full max-w-4xl px-2 relative z-10 shrink-0">
             <h1 class="font-en text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[0.2em] uppercase text-[#E56B48] drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)] whitespace-nowrap overflow-hidden text-ellipsis mx-auto">
                 Our Wedding Day
@@ -276,13 +281,12 @@
             </div>
         </nav>
 
-        <!-- 區塊一：計時器與手繪似顏繪 (頂部純白向下漸變至深莫蘭迪杏橘) -->
+        <!-- 區塊一：計時器與手繪似顏繪 -->
         <div class="bg-gradient-to-b from-white via-[#F7E5DC] to-[#EBD5C8] pb-6 pt-16 sm:pt-20">
             
-            <!-- 主視覺 Hero Section -->
             <section id="hero" class="pb-2 px-2 sm:px-4 text-center max-w-5xl mx-auto relative flex flex-col items-center justify-center">
                 
-                <!-- 1. 倒數計時器 (移除外層 Card 框) -->
+                <!-- 倒數計時器 (清爽無 Card 框) -->
                 <div class="w-full max-w-lg mx-auto p-2 mb-2">
                     <div class="text-center mb-1.5">
                         <p class="text-xs sm:text-sm font-medium tracking-widest text-morandi-deepOrange">
@@ -300,7 +304,6 @@
                             <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1.5">DAYS</span>
                         </div>
 
-                        <!-- 分隔線 | -->
                         <div class="text-morandi-orange/30 font-light text-xl sm:text-2xl px-1">|</div>
 
                         <!-- HOURS -->
@@ -309,7 +312,6 @@
                             <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1.5">HRS</span>
                         </div>
 
-                        <!-- 分隔線 | -->
                         <div class="text-morandi-orange/30 font-light text-xl sm:text-2xl px-1">|</div>
 
                         <!-- MINS -->
@@ -318,7 +320,6 @@
                             <span class="font-en text-[9px] sm:text-[11px] font-semibold text-morandi-muted uppercase tracking-[0.18em] mt-1.5">MINS</span>
                         </div>
 
-                        <!-- 分隔線 | -->
                         <div class="text-morandi-orange/30 font-light text-xl sm:text-2xl px-1">|</div>
 
                         <!-- SECS -->
@@ -330,10 +331,10 @@
                     </div>
                 </div>
 
-                <!-- 2. 手繪圖 -->
+                <!-- 手繪似顏繪與中文姓名 -->
                 <div id="handDrawnArtwork" class="relative inline-block w-full z-10 flex flex-col items-center justify-center my-2">
                     
-                    <!-- 2026.12.20 Sun. 淡橘色背景水印文字 -->
+                    <!-- 背景水印文字 -->
                     <div class="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 font-en text-4xl sm:text-6xl md:text-8xl font-light tracking-[0.15em] text-morandi-orange/20 pointer-events-none select-none whitespace-nowrap">
                         2026.12.20 Sun.
                     </div>
@@ -345,7 +346,7 @@
                              onerror="this.onerror=null; this.src='https://placehold.co/1000x1000/FAF6F0/B36547?text=Bo-Cian+%26+Yi-Hsuan';">
                     </div>
 
-                    <!-- 手繪圖下方：新人中文名字小字 -->
+                    <!-- 新人姓名 -->
                     <div class="mt-2 relative z-10">
                         <p class="text-xl sm:text-2xl md:text-3xl font-bold tracking-[0.25em] text-morandi-coffee">
                             蕭博謙 <span class="text-morandi-orange mx-1.5">‧</span> 林怡萱
@@ -373,14 +374,14 @@
             </section>
         </div>
 
-        <!-- 區塊二：新人資訊、家長名單、想說的話與婚紗照 -->
+        <!-- 區塊二：新人資訊、家長名單與婚紗照 -->
         <div class="bg-gradient-to-b from-[#EBD5C8] via-[#F4E8E1] to-[#FAF6F0] pt-2 pb-12 px-4">
             <section class="max-w-3xl mx-auto space-y-10">
                 
                 <!-- 新人合照與資訊區塊 -->
                 <div class="flex flex-col items-center space-y-6">
                     
-                    <!-- 新人合照（手機版 -mx-4 貼齊螢幕左右兩側，無圓角） -->
+                    <!-- 新人合照 -->
                     <div class="relative w-[calc(100%+2rem)] -mx-4 sm:mx-auto sm:w-full sm:max-w-xl">
                         <img src="https://lh3.googleusercontent.com/d/1V6rPP9odV3XehxCdO2X_FSmPsfkk2q0Y" 
                              alt="蕭博謙與林怡萱合照" 
@@ -388,16 +389,15 @@
                              onerror="this.onerror=null; this.src='https://placehold.co/800x600/F4E8E1/B36547?text=Bo-Cian+%26+Yi-Hsuan';">
                     </div>
 
-                    <!-- 新人與家長資訊（左側新郎，右側新娘） -->
+                    <!-- 新人與家長資訊 -->
                     <div class="w-full flex justify-around items-start">
-                        <!-- 新郎資料（左側） -->
+                        <!-- 新郎 -->
                         <div class="space-y-2 w-[46%] flex flex-col items-center text-center">
                             <div>
                                 <h4 class="text-base sm:text-lg font-bold tracking-wider">蕭博謙</h4>
                                 <p class="font-en text-xs sm:text-sm text-morandi-muted tracking-widest">Bo-Cian</p>
                                 <p class="text-[11px] sm:text-xs text-morandi-orange tracking-widest uppercase mt-0.5 font-medium">Groom / 新郎</p>
                             </div>
-                            <!-- 家長名單 -->
                             <div class="pt-1 text-xs sm:text-sm text-morandi-brown/90 leading-relaxed">
                                 <p class="font-semibold text-morandi-deepOrange mb-1">【新郎家長】</p>
                                 <p class="text-sm sm:text-base font-bold tracking-wider">蕭富雄</p>
@@ -405,14 +405,13 @@
                             </div>
                         </div>
 
-                        <!-- 新娘資料（右側） -->
+                        <!-- 新娘 -->
                         <div class="space-y-2 w-[46%] flex flex-col items-center text-center">
                             <div>
                                 <h4 class="text-base sm:text-lg font-bold tracking-wider">林怡萱</h4>
                                 <p class="font-en text-xs sm:text-sm text-morandi-muted tracking-widest">Yi-Hsuan</p>
                                 <p class="text-[11px] sm:text-xs text-morandi-orange tracking-widest uppercase mt-0.5 font-medium">Bride / 新娘</p>
                             </div>
-                            <!-- 家長名單 -->
                             <div class="pt-1 text-xs sm:text-sm text-morandi-brown/90 leading-relaxed">
                                 <p class="font-semibold text-morandi-deepOrange mb-1">【新娘家長】</p>
                                 <p class="text-sm sm:text-base font-bold tracking-wider">林玉堂 ‧ 許錦雀</p>
@@ -421,9 +420,8 @@
                     </div>
                 </div>
 
-                <!-- 婚紗照區域：尺寸微調縮小 -->
+                <!-- 婚紗照區域 -->
                 <div class="pt-4 space-y-8 -mx-4 sm:mx-0">
-                    <!-- 第一張婚紗照（手機版貼齊螢幕右邊，尺寸小巧） -->
                     <div class="flex justify-end">
                         <div class="w-[65%] sm:w-[45%] md:w-[38%] max-w-[260px]">
                             <img src="https://lh3.googleusercontent.com/d/1kYoVe2ql43v5m-6NYjVLXdzl8grC-8oK" 
@@ -433,7 +431,6 @@
                         </div>
                     </div>
 
-                    <!-- 兩張婚紗照之間的溫暖話語 -->
                     <div class="py-4 px-6 text-center my-2">
                         <p class="text-sm sm:text-base md:text-lg text-morandi-brown tracking-wider leading-relaxed">
                             「茫茫人海中，遇見彼此是萬分之一的幸運；<br>
@@ -441,7 +438,6 @@
                         </p>
                     </div>
 
-                    <!-- 第二張婚紗照（手機版貼齊螢幕左邊，尺寸小巧） -->
                     <div class="flex justify-start">
                         <div class="w-[65%] sm:w-[45%] md:w-[38%] max-w-[260px]">
                             <img src="https://lh3.googleusercontent.com/d/185xuzvUb-233eNEm6IXC_Oc6orinoNd9" 
@@ -474,21 +470,17 @@
                             </span>
                         </div>
 
-                        <!-- 容器：手機版上下排列 (flex-col)，電腦版左右分欄 (md:flex-row) -->
                         <div class="flex flex-col md:flex-row md:items-center md:justify-around gap-6 pt-1">
-                            <!-- 上半部與左半部：日期與開席時間 (居中對齊) -->
+                            <!-- 時間資訊 -->
                             <div class="flex items-center justify-center gap-4 sm:gap-6 py-2">
-                                <!-- 26 12 20 數字 (無中間間距) -->
                                 <div class="flex flex-col justify-center items-center font-en font-bold text-[#db4809] text-3xl sm:text-4xl md:text-5xl leading-[0.9] py-0 space-y-0">
                                     <span>26</span>
                                     <span>12</span>
                                     <span>20</span>
                                 </div>
 
-                                <!-- 中間垂直分隔線 -->
                                 <div class="w-[1px] bg-morandi-orange/30 self-stretch my-0.5"></div>
 
-                                <!-- 右側時間資訊 -->
                                 <div class="text-left flex flex-col justify-between py-0.5 text-sm sm:text-base md:text-lg font-medium text-morandi-brown tracking-wider space-y-1.5">
                                     <p>2026 / 12 / 20</p>
                                     <p>Sunday 星期日</p>
@@ -496,13 +488,11 @@
                                 </div>
                             </div>
 
-                            <!-- 下半部 (手機) / 右半部 (電腦)：DECEMBER 2026 日曆 -->
+                            <!-- 日曆表格 -->
                             <div class="flex flex-col items-center justify-center">
-                                <!-- 日曆底色容器（尺寸再縮小 p-2 sm:p-2.5，整體更精緻精巧） -->
                                 <div class="w-full sm:w-auto bg-[#F8EFEA]/80 border border-morandi-orange/20 rounded-2xl p-2.5 sm:p-3 flex flex-col items-center shadow-inner">
                                     <span class="text-[11px] sm:text-xs text-morandi-muted font-en tracking-[0.2em] font-bold mb-1 uppercase">DECEMBER 2026</span>
                                     
-                                    <!-- 日曆表格（字體加大 text-xs sm:text-sm md:text-base） -->
                                     <div class="w-full sm:w-auto flex-shrink-0">
                                         <div class="grid grid-cols-7 text-center text-xs sm:text-sm font-semibold gap-y-0.5 w-48 sm:w-52 mx-auto items-center">
                                             <span class="text-morandi-orange font-bold h-6 sm:h-7 flex items-center justify-center text-xs sm:text-sm">日</span>
@@ -537,7 +527,7 @@
                                             <span class="h-6 sm:h-7 flex items-center justify-center">18</span>
                                             <span class="h-6 sm:h-7 flex items-center justify-center">19</span>
                                             
-                                            <!-- 20 日愛心標記 (#db4809) -->
+                                            <!-- 20 日愛心標記 -->
                                             <div class="relative flex items-center justify-center h-6 sm:h-7">
                                                 <i class="fa-solid fa-heart text-[#db4809] text-base sm:text-lg highlight-circle"></i>
                                                 <span class="absolute text-white font-bold text-[9px] sm:text-[10px] z-10 pt-[0.5px]">20</span>
@@ -578,7 +568,7 @@
                             </p>
                         </div>
 
-                        <!-- 宴客場地地圖 (無硬邊框，邊緣柔和淡入) -->
+                        <!-- 地圖引導圖 -->
                         <div class="pt-2">
                             <p class="text-xs text-morandi-muted mb-2 font-medium">【宴客場地位置引導圖】</p>
                             <div class="map-soft-edge overflow-hidden">
@@ -612,6 +602,7 @@
                 </div>
 
                 <div class="space-y-4 max-w-2xl mx-auto">
+                    <!-- 自行開車 -->
                     <div class="bg-white/80 rounded-2xl border border-morandi-lightOrange overflow-hidden shadow-sm transition-all duration-300">
                         <button onclick="toggleAccordion(1)" class="w-full px-5 py-4 flex justify-between items-center text-left focus:outline-none bg-white/50 hover:bg-morandi-lightOrange/30 transition-colors">
                             <span class="font-bold text-morandi-brown flex items-center text-sm md:text-base">
@@ -634,6 +625,7 @@
                         </div>
                     </div>
 
+                    <!-- 大眾運輸 -->
                     <div class="bg-white/80 rounded-2xl border border-morandi-lightOrange overflow-hidden shadow-sm transition-all duration-300">
                         <button onclick="toggleAccordion(2)" class="w-full px-5 py-4 flex justify-between items-center text-left focus:outline-none bg-white/50 hover:bg-morandi-lightOrange/30 transition-colors">
                             <span class="font-bold text-morandi-brown flex items-center text-sm md:text-base">
@@ -656,6 +648,7 @@
                         </div>
                     </div>
 
+                    <!-- 貼心叮嚀 -->
                     <div class="bg-white/80 rounded-2xl border border-morandi-lightOrange overflow-hidden shadow-sm transition-all duration-300">
                         <button onclick="toggleAccordion(3)" class="w-full px-5 py-4 flex justify-between items-center text-left focus:outline-none bg-white/50 hover:bg-morandi-lightOrange/30 transition-colors">
                             <span class="font-bold text-morandi-brown flex items-center text-sm md:text-base">
@@ -689,7 +682,7 @@
     </div>
 
     <script>
-        // 0. 平滑滾動至指定區塊
+        // 平滑滾動至指定區塊
         function scrollToSection(id) {
             const el = document.getElementById(id);
             if (el) {
@@ -716,25 +709,27 @@
             }
         });
 
-        // 1. 封面高級淡出動態效果 (Soft Fade Out)
+        // 封面淡出過渡效果
         function flipPage() {
             const cover = document.getElementById('coverPage');
             const body = document.body;
+            const musicBtn = document.getElementById('musicBtn');
             if (cover) {
                 window.scrollTo({ top: 0, behavior: 'instant' });
                 cover.classList.add('fade-out');
                 body.classList.remove('cover-active');
                 
-                // 點擊「Open Our Wedding」時自動開始播放音樂
+                // 進入內容頁顯示音樂按鈕並播放音樂
+                if (musicBtn) musicBtn.classList.remove('hidden');
                 playMusic();
 
                 setTimeout(() => {
                     cover.style.display = 'none';
-                }, 850);
+                }, 600);
             }
         }
 
-        // 背景音樂播放/暫停控制邏輯
+        // 背景音樂控制邏輯
         let isPlaying = false;
         function playMusic() {
             const music = document.getElementById('bgMusic');
@@ -752,37 +747,53 @@
             }
         }
 
-        function toggleMusic() {
+        function stopMusic() {
             const music = document.getElementById('bgMusic');
             const icon = document.getElementById('musicIcon');
-            if (!music) return;
-
-            if (isPlaying) {
+            if (music) {
                 music.pause();
                 isPlaying = false;
                 if (icon) {
                     icon.classList.remove('animate-disc');
                     icon.classList.replace('fa-music', 'fa-volume-xmark');
                 }
+            }
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                stopMusic();
             } else {
                 playMusic();
             }
         }
 
-        // 2. 返回封面頁
+        // 返回封面頁
         function showCoverPage() {
             const cover = document.getElementById('coverPage');
             const body = document.body;
+            const musicBtn = document.getElementById('musicBtn');
+
+            // 返回封面頁時關閉音樂並隱藏音樂按鈕
+            stopMusic();
+            if (musicBtn) musicBtn.classList.add('hidden');
+
             if (cover) {
+                // 1. 重新顯示封面層並將封面內部滾動條歸零
                 cover.style.display = 'flex';
-                void cover.offsetWidth;
+                cover.scrollTop = 0;
+
+                // 2. 視窗置頂與鎖定背景滾動
                 window.scrollTo({ top: 0, behavior: 'instant' });
-                cover.classList.remove('slide-up', 'fade-out');
                 body.classList.add('cover-active');
+
+                // 3. 強制重繪後移除 fade-out 類別，確保立刻顯示並進行淡入動畫
+                void cover.offsetWidth;
+                cover.classList.remove('fade-out');
             }
         }
 
-        // 3. 交通指引摺疊選單切換
+        // 手風琴折疊選單切換
         function toggleAccordion(id) {
             const content = document.getElementById(`acc-content-${id}`);
             const icon = document.getElementById(`acc-icon-${id}`);
@@ -805,7 +816,7 @@
             }
         }
 
-        // 4. 婚禮倒數計時器邏輯
+        // 婚禮倒數計時器邏輯
         function startCountdown() {
             const targetDate = new Date('2026-12-20T12:30:00+08:00').getTime();
 
