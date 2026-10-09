@@ -60,20 +60,6 @@
             height: 100%;
             touch-action: none;
         }
-        html:has(body.cover-active) {
-            overflow: hidden !important;
-            height: 100%;
-        }
-
-        /* 封面頁期間：內容頁收合成一個畫面高並隱藏，絕不會從封面下方露出 */
-        body.cover-active #contentPage {
-            height: 100dvh;
-            max-height: 100dvh;
-            overflow: hidden;
-            visibility: hidden;
-            transition: visibility 0s linear 0.6s;
-        }
-
         /* 矮螢幕（小手機、橫向）縮小封面間距，讓內容盡量一屏放得下 */
         @media (max-height: 700px) {
             #coverPage { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
@@ -100,20 +86,21 @@
         }
 
         .cover-page {
-            position: fixed;
+            position: fixed !important;
             top: 0;
             right: 0;
             bottom: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: auto;
+            height: auto;
             z-index: 50;
             background-size: cover;
             background-position: center;
             overscroll-behavior: contain;
             opacity: 1;
             visibility: visible;
-            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.4s ease;
+            will-change: opacity;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             backface-visibility: hidden;
@@ -122,10 +109,9 @@
         /* 高級淡出轉場感 (Soft Fade Out) */
         .cover-page.fade-out {
             opacity: 0;
-            transform: scale(1.03);
             visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.6s;
+            transition: opacity 0.4s ease, visibility 0s linear 0.4s;
         }
 
         /* 計時器數字微光流過動態 (Shimmer Wave) */
@@ -227,7 +213,7 @@
     </button>
 
     <!-- 1. 封面頁 (Cover Page) -->
-    <div id="coverPage" class="cover-page flex flex-col justify-between items-center text-center px-4 py-4 sm:p-6 text-white bg-cover bg-center bg-no-repeat relative overflow-y-auto"
+    <div id="coverPage" class="cover-page flex flex-col justify-between items-center text-center px-4 py-4 sm:p-6 text-white bg-cover bg-center bg-no-repeat overflow-y-auto"
          style="background-image: url('https://lh3.googleusercontent.com/d/1OFcZaEFxQfLGEw-NLCK4q9UJTPL8BBdU');">
 
         <!-- 頂部漸層：柔和白透向下漸變 -->
@@ -316,12 +302,12 @@
         </nav>
 
         <!-- 區塊一：計時器與手繪似顏繪 -->
-        <div class="bg-gradient-to-b from-white via-[#F7E5DC] to-[#EBD5C8] pb-6 pt-16 sm:pt-20">
+        <div id="heroWrap" class="bg-gradient-to-b from-white via-[#F7E5DC] to-[#EBD5C8] pb-6" style="padding-top:56px;">
             
             <section id="hero" class="pb-2 px-2 sm:px-4 text-center max-w-5xl mx-auto relative flex flex-col items-center justify-center">
                 
                 <!-- 倒數計時器 (清爽無 Card 框) -->
-                <div class="w-full max-w-lg mx-auto p-2 mb-2">
+                <div id="countdownSection" class="w-full max-w-lg mx-auto px-2 pt-3 pb-2 mb-2">
                     <div class="text-center mb-1.5">
                         <p class="text-xs sm:text-sm font-medium tracking-widest text-morandi-deepOrange">
                             紅包準備好了嗎? 婚禮倒數中!!
@@ -588,7 +574,7 @@
 
         <!-- 區塊四：宴客場地與交通 -->
         <div id="transport" class="bg-gradient-to-b from-[#F4E8E1] via-[#EBD5C8] to-[#FAF6F0] py-14 px-4">
-            <section class="max-w-3xl mx-auto space-y-8">
+            <section class="max-w-2xl mx-auto space-y-8">
 
                 <div class="text-center space-y-0.5">
                     <span class="font-en text-xs sm:text-sm text-morandi-orange font-medium tracking-[0.25em] uppercase block">Location &amp; Access</span>
@@ -717,6 +703,23 @@
         });
 
         // 封面淡出過渡效果
+        // 上方留白剛好等於導覽列高度，頁面頂端緊接倒數計時，沒有多餘空白
+        function fitHeroPadding() {
+            const nav = document.querySelector('#contentPage nav');
+            const wrap = document.getElementById('heroWrap');
+            // 導覽列高度至少 48px，避免樣式尚未載入完成時量到過小的值而讓計時器被蓋住
+            if (nav && wrap) wrap.style.paddingTop = Math.max(nav.offsetHeight, 48) + 'px';
+        }
+        // 導覽列大小任何時候改變（樣式載入完成、字體載入、旋轉螢幕）都重新計算
+        (function () {
+            const nav = document.querySelector('#contentPage nav');
+            if (nav && window.ResizeObserver) new ResizeObserver(fitHeroPadding).observe(nav);
+        })();
+        window.addEventListener('resize', fitHeroPadding);
+        window.addEventListener('load', fitHeroPadding);
+        fitHeroPadding();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroPadding);
+
         // 瞬間捲到頁面最上方（暫時關閉 scroll-smooth，避免手機瀏覽器變成慢慢滑動）
         function jumpToTopInstant() {
             const root = document.documentElement;
@@ -734,20 +737,40 @@
             const cover = document.getElementById('coverPage');
             const body = document.body;
             const musicBtn = document.getElementById('musicBtn');
-            if (cover) {
-                clearTimeout(coverHideTimer);
-                jumpToTopInstant();
-                cover.classList.add('fade-out');
-                body.classList.remove('cover-active');
+            if (!cover || body.dataset.flipping === '1') return;
+            body.dataset.flipping = '1';
+            clearTimeout(coverHideTimer);
 
-                // 進入內容頁顯示音樂按鈕並播放音樂
-                if (musicBtn) musicBtn.classList.remove('hidden');
-                playMusic();
+            // 進入內容頁顯示音樂按鈕並播放音樂（需在點擊當下呼叫）
+            if (musicBtn) musicBtn.classList.remove('hidden');
+            playMusic();
 
-                coverHideTimer = setTimeout(() => {
-                    cover.style.display = 'none';
-                }, 600);
-            }
+            // 1. 封面仍蓋在最上層（完全不透明）時，先在底下把內容頁排好版並回到最上方
+            body.classList.remove('cover-active');
+            void body.offsetHeight;
+            fitHeroPadding();
+            jumpToTopInstant();
+
+            // 2. 等字體就緒、版面穩定（最多等 0.4 秒），再確認一次位置
+            const fontsReady = (document.fonts && document.fonts.ready)
+                ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 400))])
+                : Promise.resolve();
+
+            fontsReady.then(() => {
+                requestAnimationFrame(() => {
+                    jumpToTopInstant();
+                    requestAnimationFrame(() => {
+                        jumpToTopInstant();
+
+                        // 3. 排版完成、位置確定後，才淡出封面
+                        cover.classList.add('fade-out');
+                        coverHideTimer = setTimeout(() => {
+                            cover.style.display = 'none';
+                            body.dataset.flipping = '0';
+                        }, 450);
+                    });
+                });
+            });
         }
 
         // 背景音樂控制邏輯
@@ -802,6 +825,7 @@
             if (cover) {
                 // 取消尚未執行的「隱藏封面」計時器，避免和返回動作互相打架
                 clearTimeout(coverHideTimer);
+                body.dataset.flipping = '0';
 
                 // 1. 先瞬間回到頁面最上方，再鎖定背景滾動（順序很重要，鎖定後就無法再捲動）
                 jumpToTopInstant();
